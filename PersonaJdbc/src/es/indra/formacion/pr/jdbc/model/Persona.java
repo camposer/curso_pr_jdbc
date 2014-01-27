@@ -1,6 +1,7 @@
 package es.indra.formacion.pr.jdbc.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Persona implements Serializable {
@@ -49,6 +50,11 @@ public class Persona implements Serializable {
 	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
+
+	public String getFechaNacimientoStr() {
+		return new SimpleDateFormat("yyyy-MM-dd").format(fechaNacimiento);
+	}
+	
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
