@@ -28,7 +28,7 @@ public class PersonaHandler {
 	
 	public void agregar(Persona p) throws SQLException {
 		String query = "INSERT INTO persona"
-				+ "(nombre, apellido, fechaNacimiento, altura) VALUES('" + 
+				+ "(nombre, apellido, fecha_nacimiento, altura) VALUES('" + 
 				p.getNombre() + "', '" + 
 				p.getApellido() + "', '" +
 				p.getFechaNacimientoStr() + "', " +
@@ -43,11 +43,48 @@ public class PersonaHandler {
 		
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
-		
+
+		imprimirPersonas(rs);
+	}
+
+	private void imprimirPersonas(ResultSet rs) throws SQLException {
 		while(rs.next()) {
 			System.out.println("\nPersona");
+			System.out.println("id = " + rs.getInt("id"));
 			System.out.println("nombre = " + rs.getString("nombre"));
-			// ...
+			System.out.println("apellido = " + rs.getString("apellido"));
+			System.out.println("fechaNacimiento = " + rs.getDate("fecha_nacimiento"));
+			System.out.println("altura = " + rs.getFloat("altura"));
 		}
+	}
+	
+	public void listarPersonasSegunEdad() throws SQLException {
+		String query = "SELECT * FROM persona ORDER BY fecha_nacimiento ASC";
+		
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		
+		imprimirPersonas(rs);
+	}
+
+	public void obtenerPersonaMasJoven() throws SQLException {
+		String query = "SELECT * FROM persona ORDER BY fecha_nacimiento DESC OFFSET 1 ROWS FETCH NEXT ROW ONLY";
+		
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		
+		imprimirPersonas(rs);
+	}
+	
+	public void cerrar() throws SQLException {
+		if (con != null) {
+			con.close();
+		}
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		cerrar();
 	}
 }
