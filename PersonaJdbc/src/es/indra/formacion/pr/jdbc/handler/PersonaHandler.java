@@ -2,6 +2,7 @@ package es.indra.formacion.pr.jdbc.handler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,14 +29,16 @@ public class PersonaHandler {
 	
 	public void agregar(Persona p) throws SQLException {
 		String query = "INSERT INTO persona"
-				+ "(nombre, apellido, fecha_nacimiento, altura) VALUES('" + 
-				p.getNombre() + "', '" + 
-				p.getApellido() + "', '" +
-				p.getFechaNacimientoStr() + "', " +
-				p.getAltura() + ")";
+				+ "(nombre, apellido, fecha_nacimiento, altura) "
+				+ "VALUES(?, ?, ?, ?)";
 		
-		Statement stmt = con.createStatement();
-		stmt.executeUpdate(query);
+		PreparedStatement pstmt = con.prepareStatement(query);
+		pstmt.setString(1, p.getNombre());
+		pstmt.setString(2, p.getApellido());
+		pstmt.setDate(3, p.getFechaNacimientoBd());
+		pstmt.setFloat(4, p.getAltura());
+		
+		pstmt.executeUpdate();
 	}
 
 	public void listarPersonasSegunAltura() throws SQLException {

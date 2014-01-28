@@ -55,6 +55,10 @@ public class Persona implements Serializable {
 		return new SimpleDateFormat("yyyy-MM-dd").format(fechaNacimiento);
 	}
 	
+	public java.sql.Date getFechaNacimientoBd() {
+		return new java.sql.Date(fechaNacimiento.getTime());
+	}
+
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
